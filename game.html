@@ -13,20 +13,58 @@
         #gameCanvas {
             background-color: #ffdd57;
             border: 2px solid #ff5733;
-            display: block;
+            display: none;
             margin: 0 auto;
         }
         #score {
             font-size: 24px;
             color: #ff5733;
+            display: none;
+        }
+        #game-over {
+            display: none;
+            font-size: 24px;
+            color: red;
+            margin-top: 20px;
+        }
+        #share {
+            display: none;
+            margin-top: 20px;
+        }
+        .cta-button {
+            background-color: #ff5733;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 1.2em;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: inline-block;
+            cursor: pointer;
+        }
+        #start-button {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+        #instructions {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #555;
         }
     </style>
 </head>
 <body>
 
 <h1>FriedEggToken Catch Game 🍳</h1>
+<img src="images/banner-game.png" alt="FriedEggToken Catch Game Banner" style="width: 80%; margin-bottom: 20px;">
+<p id="instructions">Use the Left and Right arrow keys to move the pan and catch the eggs!</p>
+<button id="start-button" class="cta-button">Start Game</button>
 <p id="score">Score: 0</p>
 <canvas id="gameCanvas" width="480" height="320"></canvas>
+<p id="game-over">Game Over! 😢</p>
+<div id="share">
+    <a id="share-twitter" href="#" class="cta-button">Share on Twitter</a>
+</div>
 
 <script>
     const canvas = document.getElementById('gameCanvas');
@@ -39,8 +77,10 @@
     let eggY = 0;
     let panX = (canvas.width - panWidth) / 2;
     let score = 0;
+    let speed = 2; // Start speed
     let rightPressed = false;
     let leftPressed = false;
+    let gameOver = false;
 
     // Listen for key presses
     document.addEventListener('keydown', keyDownHandler, false);
@@ -82,24 +122,37 @@
         ctx.closePath();
     }
 
+    // End the game
+    function endGame() {
+        gameOver = true;
+        document.getElementById('game-over').style.display = 'block';
+        document.getElementById('share').style.display = 'block';
+        // Generate Twitter share link
+        const shareText = `I scored ${score} points in the FriedEggToken Catch Game! 🥚🍳 Can you beat me?`;
+        const twitterLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(window.location.href)}`;
+        document.getElementById('share-twitter').href = twitterLink;
+    }
+
     // Update game logic
     function updateGame() {
+        if (gameOver) return;
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawPan();
         drawEgg();
 
         // Move the egg
-        eggY += 2;
+        eggY += speed;
         if (eggY + eggHeight > canvas.height - panHeight && eggX > panX && eggX < panX + panWidth) {
             // Catch the egg
             eggY = 0;
             eggX = Math.random() * (canvas.width - eggWidth);
             score++;
+            speed += 0.5; // Increase difficulty
             document.getElementById('score').textContent = `Score: ${score}`;
         } else if (eggY > canvas.height) {
-            // Missed the egg, reset
-            eggY = 0;
-            eggX = Math.random() * (canvas.width - eggWidth);
+            // Missed the egg, end the game
+            endGame();
         }
 
         // Move the pan
@@ -112,7 +165,16 @@
         requestAnimationFrame(updateGame);
     }
 
-    updateGame();
+    // Start game function
+    function startGame() {
+        document.getElementById('start-button').style.display = 'none';
+        document.getElementById('instructions').style.display = 'none';
+        document.getElementById('gameCanvas').style.display = 'block';
+        document.getElementById('score').style.display = 'block';
+        updateGame();
+    }
+
+    document.getElementById('start-button').addEventListener('click', startGame);
 </script>
 
 </body>
