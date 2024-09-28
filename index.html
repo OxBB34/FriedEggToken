@@ -31,12 +31,31 @@
         .cta-button {
             background-color: #ff5733;
             color: white;
-            padding: 15px 30px;
+            padding: 20px 40px;
             text-decoration: none;
-            font-size: 1.5em;
-            border-radius: 5px;
+            font-size: 1.8em;
+            border-radius: 10px;
+            box-shadow: 0 8px #c44d29;
             display: inline-block;
             margin-top: 20px;
+            transition: all 0.2s ease;
+            animation: blink 1s infinite;
+        }
+        .cta-button:active {
+            box-shadow: 0 4px #c44d29;
+            transform: translateY(4px);
+        }
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        .cta-button:hover {
+            background-color: #ff7957;
+            cursor: pointer;
         }
         .roadmap {
             text-align: left;
