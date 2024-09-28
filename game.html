@@ -9,6 +9,12 @@
             background-color: #f4f4f9;
             font-family: Arial, sans-serif;
             text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
         }
         #gameCanvas {
             background-color: #ffdd57;
@@ -51,21 +57,29 @@
             font-size: 18px;
             color: #555;
         }
+        footer {
+            width: 100%;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 
 <h1>FriedEggToken Catch Game 🍳</h1>
 <p id="instructions">Use the Left and Right arrow keys to move the pan and catch the eggs!</p>
-<p><button id="start-button" class="cta-button">Start Game</button></p>
+<button id="start-button" class="cta-button">Start Game</button>
 <p id="score">Score: 0</p>
-
 <canvas id="gameCanvas" width="480" height="320"></canvas>
 <p id="game-over">Game Over! 😢</p>
 <div id="share">
     <a id="share-twitter" href="#" class="cta-button">Share on Twitter</a>
 </div>
-    <img src="images/banner-game.png" alt="FriedEggToken Catch Game Banner" style="width: 80%; margin-bottom: 20px;">
+
+<!-- Move the banner to the bottom and set its width to 100% -->
+<footer>
+    <img src="images/banner-game.png" alt="FriedEggToken Catch Game Banner" style="width: 100%; height: auto;">
+</footer>
+
 <script>
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
